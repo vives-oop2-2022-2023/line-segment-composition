@@ -1,0 +1,45 @@
+# The compiler driver
+CC=g++
+
+# Compiler flags
+CFLAGS=-c -Wall
+#		 -c: just compile, no linking
+# 	 -Wall: more warnings
+
+# The name of our binary
+OUTPUT_DIR=bin
+EXECUTABLE=$(OUTPUT_DIR)/app
+
+# Temporary output files
+TEMPS_DIR=temps
+
+# Where are the sources
+SOURCE=src
+
+# The default "all" target
+all: temps_dir output_dir $(EXECUTABLE)
+
+# hello = target
+# main.o = dependency
+# g++ = compiler driver
+# 		main.o = object files
+#			-o = output binary
+$(EXECUTABLE): $(TEMPS_DIR)/main.o
+	$(CC) $(TEMPS_DIR)/main.o -o $(EXECUTABLE)
+
+# -c = separate compilation
+# 		just compile to object, no linking
+$(TEMPS_DIR)/main.o: $(SOURCE)/main.cpp
+	$(CC) $(CFLAGS) $(SOURCE)/main.cpp -o $(TEMPS_DIR)/main.o
+
+# Target clean to remove all
+# generated files
+clean:
+	rm -rf $(TEMPS_DIR) $(OUTPUT_DIR)
+
+# Create binary output dir
+output_dir:
+	mkdir -p $(OUTPUT_DIR)
+
+temps_dir:
+	mkdir -p $(TEMPS_DIR)
